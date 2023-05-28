@@ -43,6 +43,21 @@ class TournamentBuilder
 
     private function determineNumberOfTeams(): void
     {
+        $poolSize = count($this->playerPool);
+        $numTeams = 0;
+        $isGoodTeamSize = false;
 
+        while (!$isGoodTeamSize && $numTeams < self::MAX_NUM_TEAMS){
+            $numTeams += 2;
+            $avgTeamSizeTest = $poolSize / $numTeams;
+            $isGoodTeamSize = (self::MIN_TEAM_SIZE <= $avgTeamSizeTest) && ($avgTeamSizeTest <= self::MAX_TEAM_SIZE);
+        };
+
+
+        if (!$isGoodTeamSize) {
+            throw new Exception('Teams cannot be formed with current number of players based on given constraints.');
+        }
+
+        $this->numTeams = $numTeams;
     }
 }
