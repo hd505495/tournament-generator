@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 use App\Models\User;
 
 class PlayersIntegrityTest extends TestCase
