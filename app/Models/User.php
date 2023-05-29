@@ -34,6 +34,6 @@ class User extends Model
 
     public function getRankingAttribute(): int
     {
-        return (int) $this->ranking;
+        return (int) $this->attributes['ranking'];
     }
 }

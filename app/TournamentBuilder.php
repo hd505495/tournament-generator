@@ -4,6 +4,7 @@ namespace App;
 
 use Exception;
 use App\Tournament;
+use App\Models\User;
 use Illuminate\Support\Collection;
 
 class TournamentBuilder
@@ -28,7 +29,7 @@ class TournamentBuilder
         $this->determineNumberOfTeams();
 
         // assign players to teams
-        // $this->buildTeams();
+        $this->buildTeams();
     }
 
     public function getTournament(): Tournament
@@ -53,11 +54,31 @@ class TournamentBuilder
             $isGoodTeamSize = (self::MIN_TEAM_SIZE <= $avgTeamSizeTest) && ($avgTeamSizeTest <= self::MAX_TEAM_SIZE);
         };
 
-
         if (!$isGoodTeamSize) {
             throw new Exception('Teams cannot be formed with current number of players based on given constraints.');
         }
 
         $this->numTeams = $numTeams;
+    }
+
+    private function buildTeams(): void
+    {
+        $this->initializeTeams();
+
+        $this->playerPool->sortByDesc(function (User $player) {
+            return $player->getRankingAttribute();
+        });
+
+        while ($this->playerPool->count() > 0) {
+            $team = $this->tournament->getLowestRankedTeam();
+            $team->addPlayer($this->playerPool->pop());
+        }
+    }
+
+    private function initializeTeams(): void
+    {
+        for ($i = 0; $i < $this->numTeams; $i++) {
+            $this->tournament->addTeam(new Team());
+        }
     }
 }

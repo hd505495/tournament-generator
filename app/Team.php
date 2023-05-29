@@ -8,11 +8,12 @@ use Illuminate\Support\Collection;
 class Team
 {
     private Collection $players;
-    private int $totalPlayerRanking;
+    // private int $totalPlayerRanking;
     private string $name;
 
     public function __construct()
     {
+        $this->players = new Collection();
         $this->generateName();
     }
 
@@ -43,20 +44,3 @@ class Team
         // faker name
     }
 }
-
-// class TeamBuilder
-// {
-//     private $team;
-
-//     public function __construct()
-//     {
-//         $this->reset();
-//     }
-
-//     private function reset(): void
-//     {
-//         $this->team = new Team();
-//     }
-
-//     // private function 
-// }
