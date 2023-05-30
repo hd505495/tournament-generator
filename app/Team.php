@@ -27,6 +27,11 @@ class Team
         $this->players->concat($players);
     }
 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
     public function getPlayerCount(): int
     {
         return count($this->players);
@@ -41,6 +46,8 @@ class Team
 
     private function generateName(): void
     {
-        // faker name
+        $faker = \Faker\Factory::create();
+        $faker->addProvider(new \App\Utilities\Faker\TeamName($faker));
+        $this->name = $faker->teamName();
     }
 }
