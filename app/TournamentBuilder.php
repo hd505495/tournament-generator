@@ -65,13 +65,13 @@ class TournamentBuilder
     {
         $this->initializeTeams();
 
-        $this->playerPool->sortByDesc(function (User $player) {
+        $playersSorted = $this->playerPool->sortByDesc(function (User $player) {
             return $player->getRankingAttribute();
         });
 
-        while ($this->playerPool->count() > 0) {
+        while ($playersSorted->count() > 0) {
             $team = $this->tournament->getLowestRankedTeam();
-            $team->addPlayer($this->playerPool->pop());
+            $team->addPlayer($playersSorted->pop());
         }
     }
 

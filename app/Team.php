@@ -8,7 +8,6 @@ use Illuminate\Support\Collection;
 class Team
 {
     private Collection $players;
-    // private int $totalPlayerRanking;
     private string $name;
 
     public function __construct()

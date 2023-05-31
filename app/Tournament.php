@@ -31,11 +31,11 @@ class Tournament
 
     public function getLowestRankedTeam(): ?Team
     {
-        $this->teams->sortBy(function (Team $team) {
+        $sorted = $this->teams->sortBy(function (Team $team) {
             return $team->getTotalPlayerRanking();
         });
 
         // returns null if no teams
-        return $this->teams->first();
+        return $sorted->first();
     }
 }

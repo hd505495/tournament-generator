@@ -41,11 +41,11 @@ class TournamentBuilderTest extends TestCase
         $tournament = $this->buildTournament();
 
         $teams = $tournament->getTeams();
-        $teams->sortBy(function (Team $team) {
+        $sorted = $teams->sortBy(function (Team $team) {
             return $team->getTotalPlayerRanking();
         });
 
-        $this->assertEquals($tournament->getLowestRankedTeam(), $teams->first());
+        $this->assertEquals($tournament->getLowestRankedTeam(), $sorted->first());
     }
 
     /*
