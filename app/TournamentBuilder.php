@@ -42,6 +42,10 @@ class TournamentBuilder
         return $this->numTeams;
     }
 
+    /*
+        determine how many teams will be in tournament
+        based on number of players
+    */
     private function determineNumberOfTeams(): void
     {
         $poolSize = count($this->playerPool);
@@ -61,24 +65,51 @@ class TournamentBuilder
         $this->numTeams = $numTeams;
     }
 
+    /*
+        initialize teams, sort players, then assign players
+    */
     private function buildTeams(): void
     {
         $this->initializeTeams();
 
-        $playersSorted = $this->playerPool->sortByDesc(function (User $player) {
-            return $player->getRankingAttribute();
-        });
+        $this->sortPlayersForAssignment();
 
-        while ($playersSorted->count() > 0) {
-            $team = $this->tournament->getLowestRankedTeam();
-            $team->addPlayer($playersSorted->pop());
-        }
+        $this->assignPlayersToTeams();
     }
 
+    /*
+        create pre-determined number of teams, add to tournament
+    */
     private function initializeTeams(): void
     {
         for ($i = 0; $i < $this->numTeams; $i++) {
             $this->tournament->addTeam(new Team());
+        }
+    }
+
+    /*
+        goalies sorted highest so that they are assigned first, ensuring 1 per team
+        all other player sorted by rank so that best are assigned first
+    */
+    private function sortPlayersForAssignment(): void
+    {
+        $this->playerPool = $this->playerPool->sortBy(function (User $player) {
+            if ($player->getIsGoalieAttribute()) {
+                return 6;
+            }
+            return $player->getRankingAttribute();
+        });
+    }
+
+    /*
+        assign highest ranked player to the team with lowest
+        total ranking until all are assigned
+    */
+    private function assignPlayersToTeams(): void
+    {
+        while ($this->playerPool->count() > 0) {
+            $team = $this->tournament->getLowestRankedTeam();
+            $team->addPlayer($this->playerPool->pop());
         }
     }
 }

@@ -29,6 +29,9 @@ class Tournament
         return $this->teams;
     }
 
+    /*
+        return team in tournament with lowest total player ranking
+    */
     public function getLowestRankedTeam(): ?Team
     {
         $sorted = $this->teams->sortBy(function (Team $team) {
